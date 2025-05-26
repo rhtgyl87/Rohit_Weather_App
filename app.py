@@ -8,7 +8,7 @@ app = Flask(__name__)
 # It's recommended to store API keys in environment variables for production
 OPENWEATHER_API_KEY = os.environ.get("OPENWEATHER_API_KEY", "YOUR_API_KEY")
 OPENWEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
-## changes
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     weather_data = None
