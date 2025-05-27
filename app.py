@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # Replace with your actual OpenWeatherMap API key
 # It's recommended to store API keys in environment variables for production
-OPENWEATHER_API_KEY = os.environ.get("OPENWEATHER_API_KEY", "YOUR_API_KEY")
+OPENWEATHER_API_KEY = os.environ.get("OPENWEATHER_API_KEY", "836b9dd9d83e8f864c9ad1c0c9e375a6")
 OPENWEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
 
 @app.route('/', methods=['GET', 'POST'])
