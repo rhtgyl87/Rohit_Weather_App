@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Expose port 5000, as Flask runs on this port by default
-EXPOSE 5001
+EXPOSE 5000
 
 # Define environment variable for the API key.
 # This is a placeholder; you will pass the actual key when running the container.

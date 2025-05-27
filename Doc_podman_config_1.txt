@@ -1,0 +1,69 @@
+You're looking to adapt the Dockerfile and instructions for use with Podman. The good news is that Podman is designed to be largely compatible with Docker, so the Dockerfile itself will work almost identically.
+
+The main difference lies in the commands you use to build and run your container images.
+
+Here's how you can use Podman for your weather app:
+
+Step 1: Create requirements.txt (Same as Docker)
+Ensure you have your requirements.txt file in your project directory:
+
+Flask
+requests
+Step 2: Create the Dockerfile (Same as Docker)
+Your existing Dockerfile is fully compatible with Podman. Keep it as is:
+
+Step 3: Build the Podman Image
+Open your terminal or command prompt, navigate to your project directory, and use podman build instead of docker build:
+
+Bash
+
+podman build -t weather-app .
+podman build: The command to build a Podman image.
+-t weather-app: Tags the image with the name weather-app.
+.: Specifies the build context, which is the current directory.
+Step 4: Run the Podman Container
+Once the image is built, you can run a container from it using podman run. Remember to replace YOUR_ACTUAL_OPENWEATHER_API_KEY with your actual OpenWeatherMap API key.
+
+Bash
+
+podman run -d -p 5000:5000 --name my-weather-container -e OPENWEATHER_API_KEY="836b9dd9d83e8f864c9ad1c0c9e375a6" weather-app
+podman run: The command to run a Podman container.
+-d: Runs the container in detached mode (in the background).
+-p 5000:5000: Publishes port 5000 from the container to port 5000 on your host machine.
+--name my-weather-container: Assigns a name to your container.
+-e OPENWEATHER_API_KEY="YOUR_ACTUAL_OPENWEATHER_API_KEY": Passes your OpenWeatherMap API key as an environment variable.
+weather-app: The name of the Podman image you built.
+Step 5: Access Your Application
+After running the container, open your web browser and navigate to:
+
+http://localhost:5000
+
+Your weather application should now be running, containerized with Podman!
+
+Useful Podman Commands (Equivalent to Docker):
+List running containers:
+Bash
+
+podman ps
+List all containers (including stopped ones):
+Bash
+
+podman ps -a
+Stop a running container:
+Bash
+
+podman stop my-weather-container
+Remove a container:
+Bash
+
+podman rm my-weather-container
+Remove an image:
+Bash
+
+podman rmi weather-app
+(You might need to stop and remove containers using the image first.)
+View container logs:
+Bash
+
+podman logs my-weather-container
+As you can see, the commands are very similar, often just replacing docker with podman. This makes it easy to switch between the two containerization tools.
