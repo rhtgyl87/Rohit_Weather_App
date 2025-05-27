@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Basic Weather App</title>
     <style>
+        /* Your existing CSS for overall layout, forms, and basic elements */
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f2f5;
@@ -21,7 +22,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
             width: 90%;
-            max-width: 400px;
+            max-width: 600px; /* Wider to accommodate forecast */
         }
         h1 {
             color: #333;
@@ -39,7 +40,7 @@
             border-radius: 5px;
             font-size: 16px;
             width: 100%;
-            box-sizing: border-box; /* Include padding in width */
+            box-sizing: border-box;
         }
         button {
             padding: 12px 20px;
@@ -54,13 +55,13 @@
         button:hover {
             background-color: #0056b3;
         }
-        .weather-info {
+        .weather-section {
             margin-top: 20px;
             padding-top: 20px;
             border-top: 1px solid #eee;
         }
-        .weather-info h2 {
-            margin-bottom: 10px;
+        .weather-section h2 {
+            margin-bottom: 15px;
             color: #555;
         }
         .weather-info p {
@@ -75,6 +76,29 @@
         .error {
             color: red;
             margin-top: 20px;
+        }
+        /* New styles for the forecast grid */
+        .forecast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Creates responsive columns */
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .forecast-day {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            font-size: 0.9em;
+            text-align: center;
+        }
+        .forecast-day h3 {
+            margin-top: 0;
+            color: #444;
+            font-size: 1.1em;
+        }
+        .forecast-day p {
+            margin: 5px 0;
         }
     </style>
 </head>
@@ -92,16 +116,37 @@
             <p class="error">{{ error }}</p>
         {% endif %}
 
-        {% if weather %}
-            <div class="weather-info">
-                <h2>Weather in {{ weather.city }}</h2>
+        {# Current Weather Display #}
+        {% if current_weather %}
+            <div class="weather-section current-weather">
+                <h2>Current Weather in {{ current_weather.city }}</h2>
                 <p>
-                    <img src="http://openweathermap.org/img/wn/{{ weather.icon }}.png" alt="Weather Icon" class="weather-icon">
-                    Temperature: {{ weather.temperature }}°C
+                    <img src="http://openweathermap.org/img/wn/{{ current_weather.icon }}.png" alt="Weather Icon" class="weather-icon">
+                    Temperature: {{ current_weather.temperature }}°C
                 </p>
-                <p>Description: {{ weather.description | capitalize }}</p>
-                <p>Humidity: {{ weather.humidity }}%</p>
-                <p>Wind Speed: {{ weather.wind_speed }} m/s</p>
+                <p>Description: {{ current_weather.description | capitalize }}</p>
+                <p>Humidity: {{ current_weather.humidity }}%</p>
+                <p>Wind Speed: {{ current_weather.wind_speed }} m/s</p>
+            </div>
+        {% endif %}
+
+        {# 5-Day Forecast Display #}
+        {% if forecast %}
+            <div class="weather-section forecast-section">
+                <h2>5-Day Forecast</h2>
+                <div class="forecast-grid">
+                    {# Loop through each daily forecast item #}
+                    {% for day in forecast %}
+                        <div class="forecast-day">
+                            <h3>{{ day.date }}</h3> {# Displays day and date (e.g., Monday, May 27) #}
+                            <p>
+                                <img src="http://openweathermap.org/img/wn/{{ day.icon }}.png" alt="Weather Icon" class="weather-icon">
+                                Temp: {{ day.temperature }}°C
+                            </p>
+                            <p>Desc: {{ day.description | capitalize }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         {% endif %}
     </div>
