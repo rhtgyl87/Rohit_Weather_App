@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-app-deployment
+  labels:
+    app: weather-app
+spec:
+  replicas: 1 # You can increase this for more instances of your app
+  selector:
+    matchLabels:
+      app: weather-app
+  template:
+    metadata:
+      labels:
+        app: weather-app
+    spec:
+      containers:
+      - name: weather-app-container
+        image: your-registry-username/weather-app:1.0 # IMPORTANT: Replace with your actual image name and tag
+        ports:
+        - containerPort: 5000
+        env:
+        - name: OPENWEATHER_API_KEY
+          value: "YOUR_ACTUAL_OPENWEATHER_API_KEY" # IMPORTANT: Replace with your actual OpenWeatherMap API Key
+        # Recommended: Add resource limits and probes for production
+        # resources:
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "500m"
+        # livenessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 5000
+        #   initialDelaySeconds: 10
+        #   periodSeconds: 5
+        # readinessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 5000
+        #   initialDelaySeconds: 5
+        #   periodSeconds: 3

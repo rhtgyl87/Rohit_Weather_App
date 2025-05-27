@@ -1,0 +1,106 @@
+Deploying your Flask weather app to a Kubernetes cluster using Podman is a great way to ensure scalability and manageability. While Podman itself manages containers on a single host, Kubernetes orchestrates them across a cluster of machines.
+
+Here's a step-by-step guide to achieve this:
+
+Prerequisites:
+Before you start, ensure you have the following:
+
+A Running Kubernetes Cluster: This could be a local cluster (like Minikube or Kind) or a cloud-based cluster (like GKE, EKS, AKS).
+kubectl installed and configured: Your kubectl command-line tool must be configured to connect to your Kubernetes cluster.
+Podman Installed: For building and pushing your container image.
+An Image Registry Account: You'll need an account on a container registry (e.g., Docker Hub, Google Container Registry, Quay.io) to store your image so Kubernetes can pull it.
+Your OpenWeatherMap API Key: Ready to be used as an environment variable.
+Your app.py and requirements.txt files in your project directory.
+Step 1: Build and Push Your Podman Image to a Registry
+First, you need to build your application's container image using Podman and then push it to a public or private container registry. Kubernetes will pull this image from the registry to deploy your application.
+
+Build the Image:
+Navigate to your project directory (where your Dockerfile, app.py, and requirements.txt are) and run:
+
+Bash
+
+podman build -t your-registry-username/weather-app:1.0 .
+Replace your-registry-username with your actual username on the chosen container registry (e.g., myuser/weather-app:1.0 for Docker Hub).
+:1.0 is a tag for your image version.
+Log in to Your Registry:
+Before pushing, you need to authenticate with your container registry. For Docker Hub, it would be:
+
+Bash
+
+podman login docker.io
+Enter your username and password when prompted.
+
+Push the Image:
+Once logged in, push your image to the registry:
+
+Bash
+
+podman push your-registry-username/weather-app:1.0
+Step 2: Create Kubernetes Manifests
+Now, let's define the Kubernetes resources needed to deploy your application. You'll typically use two main types of resources: a Deployment to manage your application's pods, and a Service to expose it.
+
+Create a new file named weather-app-deployment.yaml in your project directory:
+Kubernetes Deployment for Weather App
+27. Mai, 11:04
+
+Öffnen
+
+Important Notes for weather-app-deployment.yaml:
+
+image: your-registry-username/weather-app:1.0: You MUST replace this with the exact image name and tag you pushed to your registry in Step 1.
+value: "YOUR_ACTUAL_OPENWEATHER_API_KEY": You MUST replace this with your actual OpenWeatherMap API key. For production environments, consider using Kubernetes Secrets to manage sensitive information like API keys.
+replicas: 1: Starts one instance (Pod) of your application. You can scale this up later if needed.
+Next, create a file named weather-app-service.yaml in the same directory:
+Kubernetes Service for Weather App
+27. Mai, 11:04
+
+Important Notes for weather-app-service.yaml:
+
+selector: app: weather-app: This tells the Service to route traffic to any Pods that have the label app: weather-app (which our Deployment creates).
+port: 80: This is the port the Service itself will listen on within the cluster.
+targetPort: 5000: This is the port your Flask application is running on inside the container.
+type: NodePort: This makes your service accessible from outside the cluster on a specific port on each node (usually in the 30000-32767 range). This is good for local development clusters like Minikube.
+If you are deploying to a cloud provider (GKE, EKS, AKS), you might change this to type: LoadBalancer to get an external IP address for your service.
+Step 3: Deploy to Kubernetes
+Now, apply these manifest files to your Kubernetes cluster using kubectl:
+
+Apply the Deployment:
+
+Bash
+
+kubectl apply -f weather-app-deployment.yaml
+You should see output like: deployment.apps/weather-app-deployment created
+
+Apply the Service:
+
+Bash
+
+kubectl apply -f weather-app-service.yaml
+You should see output like: service/weather-app-service created
+
+Step 4: Access Your Application
+After deployment, it might take a moment for the Pods to start and the Service to become available.
+
+Check Pod Status:
+
+Bash
+
+kubectl get pods -l app=weather-app
+Wait until your Pod shows a STATUS of Running.
+
+Get Service Information:
+
+Bash
+
+kubectl get service weather-app-service
+Look for the PORT(S) column. If you used NodePort, it will show something like 80:30000/TCP. The 30000 is the port on your Kubernetes node that you can use to access the application.
+
+Access the App:
+
+For Minikube/Kind: Get the IP address of your Minikube cluster:
+Bash
+
+minikube ip
+Then, access your app at http://<minikube-ip>:<nodePort> (e.g., http://192.168.49.2:30000).
+For Cloud Clusters (with LoadBalancer type): kubectl get service weather-app-service will show an EXTERNAL-IP. Use that IP to access your app (e.g., http://<external-ip>).
+Your Flask weather application should now be running within your Kubernetes cluster!
