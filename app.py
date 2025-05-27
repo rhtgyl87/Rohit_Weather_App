@@ -37,6 +37,7 @@ def index():
                 if geo_data.get("cod") == 200:
                     lat = geo_data['coord']['lat']
                     lon = geo_data['coord']['lon']
+
                     city_name = geo_data['name'] # Use the city name returned by the API for consistency
 
                     # Step 2: Get 5-day / 3-hour forecast using coordinates
