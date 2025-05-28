@@ -19,7 +19,7 @@ EXPOSE 5000
 
 # Define environment variable for the API key.
 # This is a placeholder; you will pass the actual key when running the container.
-ENV OPENWEATHER_API_KEY="836b9dd9d83e8f864c9ad1c0c9e375a6"
+ENV OPENWEATHER_API_KEY="6XQJPZTR34ZXRAS294NMBTW8R"
 
 # Run the Flask application
 # Using 'python app.py' directly is fine for development.

@@ -26,7 +26,7 @@ Once the image is built, you can run a container from it using podman run. Remem
 
 Bash
 
-podman run -d -p 5000:5000 --name my-weather-container -e OPENWEATHER_API_KEY="836b9dd9d83e8f864c9ad1c0c9e375a6" weather-app
+podman run -d -p 5000:5000 --name my-weather-container -e OPENWEATHER_API_KEY="6XQJPZTR34ZXRAS294NMBTW8R" weather-app
 podman run: The command to run a Podman container.
 -d: Runs the container in detached mode (in the background).
 -p 5000:5000: Publishes port 5000 from the container to port 5000 on your host machine.

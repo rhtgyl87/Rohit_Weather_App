@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Basic Weather App</title>
     <style>
-        /* Your existing CSS for overall layout, forms, and basic elements */
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f2f5;
@@ -22,7 +21,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
             width: 90%;
-            max-width: 600px; /* Wider to accommodate forecast */
+            max-width: 600px;
         }
         h1 {
             color: #333;
@@ -77,10 +76,9 @@
             color: red;
             margin-top: 20px;
         }
-        /* New styles for the forecast grid */
         .forecast-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Creates responsive columns */
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 15px;
             margin-top: 20px;
         }
@@ -121,12 +119,12 @@
             <div class="weather-section current-weather">
                 <h2>Current Weather in {{ current_weather.city }}</h2>
                 <p>
-                    <img src="http://openweathermap.org/img/wn/{{ current_weather.icon }}.png" alt="Weather Icon" class="weather-icon">
+                    <img src="https://www.visualcrossing.com/img/weather/icons/{{ current_weather.icon }}.svg" alt="Weather Icon" class="weather-icon" width="40" height="40">
                     Temperature: {{ current_weather.temperature }}°C
                 </p>
-                <p>Description: {{ current_weather.description | capitalize }}</p>
+                <p>Conditions: {{ current_weather.conditions | capitalize }}</p>
                 <p>Humidity: {{ current_weather.humidity }}%</p>
-                <p>Wind Speed: {{ current_weather.wind_speed }} m/s</p>
+                <p>Wind Speed: {{ current_weather.wind_speed }} km/h</p>
             </div>
         {% endif %}
 
@@ -135,15 +133,17 @@
             <div class="weather-section forecast-section">
                 <h2>5-Day Forecast</h2>
                 <div class="forecast-grid">
-                    {# Loop through each daily forecast item #}
                     {% for day in forecast %}
                         <div class="forecast-day">
-                            <h3>{{ day.date }}</h3> {# Displays day and date (e.g., Monday, May 27) #}
+                            <h3>{{ day.date }}</h3>
                             <p>
-                                <img src="http://openweathermap.org/img/wn/{{ day.icon }}.png" alt="Weather Icon" class="weather-icon">
-                                Temp: {{ day.temperature }}°C
+                                <img src="https://www.visualcrossing.com/img/weather/icons/{{ day.icon }}.svg" alt="Weather Icon" class="weather-icon" width="40" height="40">
+                                Min: {{ day.temperature_min | round(1) }}°C
                             </p>
-                            <p>Desc: {{ day.description | capitalize }}</p>
+                             <p>
+                                Max: {{ day.temperature_max | round(1) }}°C
+                            </p>
+                            <p>Conditions: {{ day.conditions | capitalize }}</p>
                         </div>
                     {% endfor %}
                 </div>
